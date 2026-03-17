@@ -1,0 +1,36 @@
+# Siriusec_MCP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: siriusec-mcp
+  namespace: siriusec-mcp
+  labels:
+    app: siriusec-mcp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7140
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: siriusec-mcp
+---
+# Siriusec_MCP NodePort Service (用于外部访问)
+apiVersion: v1
+kind: Service
+metadata:
+  name: siriusec-mcp-nodeport
+  namespace: siriusec-mcp
+  labels:
+    app: siriusec-mcp
+spec:
+  type: NodePort
+  ports:
+    - port: 7140
+      targetPort: http
+      nodePort: 30140
+      protocol: TCP
+      name: http
+  selector:
+    app: siriusec-mcp

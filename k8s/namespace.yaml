@@ -1,0 +1,8 @@
+# Siriusec_MCP 命名空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: siriusec-mcp
+  labels:
+    app: siriusec-mcp
+    version: v1

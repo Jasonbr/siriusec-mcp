@@ -1,0 +1,152 @@
+# Siriusec_MCP Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siriusec-mcp
+  namespace: siriusec-mcp
+  labels:
+    app: siriusec-mcp
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: siriusec-mcp
+  template:
+    metadata:
+      labels:
+        app: siriusec-mcp
+        version: v1
+    spec:
+      serviceAccountName: siriusec-mcp
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: siriusec-mcp
+          image: siriusec-mcp:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7140
+              protocol: TCP
+          command:
+            - "/app/siriusec-mcp-server"
+            - "--streamable-http"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "7140"
+            - "--path"
+            - "/mcp/unified"
+          env:
+            # 从 ConfigMap 加载配置
+            - name: DEPLOY_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: siriusec-mcp-config
+                  key: DEPLOY_MODE
+            - name: OPENAPI_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  name: siriusec-mcp-config
+                  key: OPENAPI_TYPE
+            - name: REGION_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: siriusec-mcp-config
+                  key: REGION_ID
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: siriusec-mcp-config
+                  key: LOG_LEVEL
+            # 从 Secret 加载敏感配置
+            - name: ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ACCESS_KEY_ID
+            - name: OPENAPI_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ACCESS_KEY_ID
+            - name: ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ACCESS_KEY_SECRET
+            - name: OPENAPI_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ACCESS_KEY_SECRET
+            - name: SECURITY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: SECURITY_TOKEN
+                  optional: true
+            - name: OPENAPI_SECURITY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: SECURITY_TOKEN
+                  optional: true
+            - name: ROLE_ARN
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ROLE_ARN
+                  optional: true
+            - name: OPENAPI_ROLE_ARN
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: ROLE_ARN
+                  optional: true
+            - name: DASHSCOPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: siriusec-mcp-secret
+                  key: DASHSCOPE_API_KEY
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /mcp/unified
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /mcp/unified
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      # 使用临时存储
+      volumes:
+        - name: tmp
+          emptyDir: {}

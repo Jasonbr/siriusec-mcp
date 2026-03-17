@@ -1,0 +1,57 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# 测试
+test/
+*_test.go
+coverage.out
+coverage.html
+
+# 构建产物
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# 依赖缓存
+vendor/
+
+# 文档
+*.md
+docs/
+
+# 本地环境配置
+.env
+.env.local
+.env.*.local
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Kubernetes
+k8s/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# 日志
+*.log
+logs/
+
+# 临时文件
+tmp/
+temp/
+*.tmp

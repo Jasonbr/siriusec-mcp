@@ -1,0 +1,36 @@
+# Siriusec_MCP Ingress
+# 用于外部 HTTP/HTTPS 访问
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: siriusec-mcp
+  namespace: siriusec-mcp
+  labels:
+    app: siriusec-mcp
+  annotations:
+    # Nginx Ingress Controller 配置
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    # 可选: 配置 cert-manager 自动签发证书
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  # 配置 TLS (需要提前创建 secret 或使用 cert-manager)
+  # tls:
+  #   - hosts:
+  #       - siriusec-mcp.yourdomain.com
+  #     secretName: siriusec-mcp-tls
+  rules:
+    - host: siriusec-mcp.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: siriusec-mcp
+                port:
+                  number: 7140
