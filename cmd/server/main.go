@@ -14,6 +14,7 @@ import (
 	"siriusec-mcp/internal/tools/crashagent"
 	"siriusec-mcp/internal/tools/initial"
 	"siriusec-mcp/internal/tools/iodiag"
+	"siriusec-mcp/internal/tools/llmtools"
 	"siriusec-mcp/internal/tools/memdiag"
 	"siriusec-mcp/internal/tools/netdiag"
 	"siriusec-mcp/internal/tools/otherdiag"
@@ -94,6 +95,7 @@ func runServer(args []string) {
 	otherdiag.RegisterTools(server)
 	crashagent.RegisterTools(server)
 	initial.RegisterTools(server)
+	llmtools.RegisterTools(server)
 
 	logger.Info("Tools loaded",
 		zap.Int("count", len(server.GetAllTools())),

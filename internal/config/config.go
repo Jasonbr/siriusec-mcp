@@ -6,6 +6,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,6 +34,14 @@ type OpenAPIConfig struct {
 
 // LLMConfig LLM配置
 type LLMConfig struct {
+	Provider    string  // 提供商: dashscope, openai, azure, custom
+	APIKey      string  // API Key
+	BaseURL     string  // 自定义 API 基础 URL
+	Model       string  // 模型名称
+	Temperature float64 // 温度参数
+	MaxTokens   int     // 最大 token 数
+	Timeout     int     // 超时时间(秒)
+	// 兼容旧配置
 	DashScopeAPIKey string
 	LLMAK           string
 }
@@ -67,6 +76,14 @@ func LoadConfig() *Config {
 			RegionID:        getEnv("REGION_ID", "cn-hangzhou"),
 		},
 		LLM: LLMConfig{
+			Provider:    getEnv("LLM_PROVIDER", "dashscope"),
+			APIKey:      getEnv("LLM_API_KEY", getEnv("DASHSCOPE_API_KEY", "")),
+			BaseURL:     getEnv("LLM_BASE_URL", ""),
+			Model:       getEnv("LLM_MODEL", "qwen-turbo"),
+			Temperature: getEnvAsFloat("LLM_TEMPERATURE", 0.7),
+			MaxTokens:   getEnvAsInt("LLM_MAX_TOKENS", 1500),
+			Timeout:     getEnvAsInt("LLM_TIMEOUT", 60),
+			// 兼容旧配置
 			DashScopeAPIKey: getEnv("DASHSCOPE_API_KEY", ""),
 			LLMAK:           getEnv("sysom_service___llm___llm_ak", getEnv("DASHSCOPE_API_KEY", "")),
 		},
@@ -113,6 +130,28 @@ func loadEnvFile() {
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
+	}
+	return defaultValue
+}
+
+// getEnvAsInt 获取环境变量作为整数
+func getEnvAsInt(key string, defaultValue int) int {
+	if value := os.Getenv(key); value != "" {
+		var result int
+		if _, err := fmt.Sscanf(value, "%d", &result); err == nil {
+			return result
+		}
+	}
+	return defaultValue
+}
+
+// getEnvAsFloat 获取环境变量作为浮点数
+func getEnvAsFloat(key string, defaultValue float64) float64 {
+	if value := os.Getenv(key); value != "" {
+		var result float64
+		if _, err := fmt.Sscanf(value, "%f", &result); err == nil {
+			return result
+		}
 	}
 	return defaultValue
 }

@@ -42,6 +42,7 @@ func ServeStreamableHTTP(mcpServer *server.MCPServer, host string, port int, pat
 	)
 
 	// MCP 端点
+	mux.Handle(path, httpServer)
 	mux.Handle(path+"/", httpServer)
 
 	// 健康检查端点
