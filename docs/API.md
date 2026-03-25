@@ -437,6 +437,94 @@ IO 一键诊断工具。
 |--------|------|------|------|
 | uid | string | 是 | 用户ID |
 
+### 智能诊断工具
+
+#### smart_diagnose
+
+智能诊断工具，自动调用底层诊断工具并基于 AI 分析给出专业报告。
+
+**参数**:
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| symptom | string | 是 | 症状描述，如'CPU 使用率 100%' |
+| context | string | 否 | 上下文信息，如实例 ID、应用类型等 |
+
+**使用示例**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "smart_diagnose",
+    "arguments": {
+      "symptom": "系统 CPU 使用率过高",
+      "context": "实例ID: i-xxx, 应用: Java服务"
+    }
+  }
+}
+```
+
+**响应示例**:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "【智能诊断报告】\n\n🤖 诊断模型：kimi-k2.5\n📋 调用的工具：[cpu_analysis]\n..."
+      }
+    ],
+    "isError": false
+  }
+}
+```
+
+## Web UI 接口
+
+Web UI 通过以下端点与 MCP Server 通信：
+
+### 统一 MCP 端点
+
+```
+POST /api/mcp/unified
+```
+
+所有 MCP 协议请求（initialize、tools/list、tools/call）都通过此端点发送。
+
+**请求头**:
+| 头信息 | 说明 |
+|--------|------|
+| Content-Type | application/json |
+| Mcp-Session-Id | 会话ID（initialize 后获取） |
+
+**前端配置示例**:
+```javascript
+const MCP_SERVER_URL = '/api/mcp/unified';
+
+// 初始化会话
+async function initSession() {
+  const response = await fetch(MCP_SERVER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: Date.now(),
+      method: 'initialize',
+      params: {
+        protocolVersion: '2024-11-05',
+        capabilities: {},
+        clientInfo: { name: 'SiriusecMCP-WebUI', version: '1.0.0' }
+      }
+    })
+  });
+  const data = await response.json();
+  return data.result._sessionId;
+}
+```
+
 ## CLI 命令参考
 
 Siriusec MCP 提供强大的命令行工具，便于运维和调试。

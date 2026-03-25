@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siriusec MCP - 智能运维平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 主色调 */
+            --primary: #4F46E5;
+            --primary-light: #6366F1;
+            --primary-dark: #4338CA;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            
+            /* 中性色 */
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            
+            /* 功能色 */
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            
+            /* 阴影 */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* 圆角 */
+            --radius-sm: 0.375rem;
+            --radius: 0.5rem;
+            --radius-md: 0.625rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* 间距系统 - 新增 */
+            --space-1: 0.25rem;  /* 4px */
+            --space-2: 0.5rem;   /* 8px */
+            --space-3: 0.75rem;  /* 12px */
+            --space-4: 1rem;     /* 16px */
+            --space-5: 1.25rem;  /* 20px */
+            --space-6: 1.5rem;   /* 24px */
+            --space-8: 2rem;     /* 32px */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--space-5);
+        }
+        
+        /* ========== Header ========== */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5) var(--space-6);
+            margin-bottom: var(--space-5);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+        
+        .brand-text h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+            letter-spacing: -0.01em;
+        }
+        
+        .brand-text p {
+            font-size: 12px;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--gray-600);
+            font-size: 18px;
+        }
+        
+        .btn-icon:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ========== Stats Cards ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-3);
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--gray-100);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-2);
+        }
+        
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.primary { 
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(99, 102, 241, 0.08));
+        }
+        .stat-icon.success { 
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08));
+        }
+        .stat-icon.warning { 
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.08));
+        }
+        .stat-icon.info { 
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.08));
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: var(--gray-500);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+            letter-spacing: -0.01em;
+        }
+        
+        .stat-change {
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-weight: 400;
+        }
+        
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--danger); }
+        
+        /* ========== Tabs ========== */
+        .tabs {
+            display: flex;
+            gap: var(--space-2);
+            background: rgba(255, 255, 255, 0.2);
+            padding: var(--space-2);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: var(--space-2) var(--space-4);
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ========== Main Content Grid ========== */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--space-4);
+            height: calc(100vh - 360px);
+            min-height: 500px;
+        }
+        
+        /* ========== Session History Button (悬浮按钮) ========== */
+        .history-toggle {
+            position: fixed;
+            bottom: var(--space-5);
+            right: var(--space-5);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            padding: var(--space-3) var(--space-4);
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .history-count {
+            background: rgba(255, 255, 255, 0.25);
+            padding: var(--space-1) var(--space-2);
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        /* ========== Session History Drawer (侧边抽屉) ========== */
+        .session-drawer {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .session-drawer.open {
+            transform: translateX(-350px);
+        }
+        
+        .drawer-header {
+            padding: var(--space-5);
+            border-bottom: 2px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--gray-50), white);
+        }
+        
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .drawer-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--gray-500);
+            transition: all 0.2s;
+        }
+        
+        .drawer-close:hover {
+            background: var(--gray-50);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-4);
+        }
+        
+        .drawer-footer {
+            padding: var(--space-4);
+            border-top: 2px solid var(--gray-100);
+            background: var(--gray-50);
+        }
+        
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        
+        .session-item {
+            padding: var(--space-3);
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+        
+        .session-item:hover {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(99, 102, 241, 0.05));
+            border-color: var(--primary-light);
+            transform: translateX(4px);
+        }
+        
+        .session-question {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+        
+        .session-time {
+            font-size: 11px;
+            color: var(--gray-400);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px var(--space-5);
+            color: var(--gray-400);
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: var(--space-4);
+            opacity: 0.5;
+        }
+        
+        .clear-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--danger), #DC2626);
+            color: white;
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .clear-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* ========== Sidebar ========== */
+        .sidebar {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--gray-100);
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 2px solid var(--gray-100);
+        }
+        
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .sidebar-count {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: var(--space-1) var(--space-3);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .tool-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: var(--space-5);
+            padding-right: var(--space-2);
+        }
+        
+        .tool-item {
+            padding: var(--space-3);
+            background: var(--gray-50);
+            border-left: 3px solid var(--primary);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-2);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tool-item:hover {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(99, 102, 241, 0.05));
+            transform: translateX(6px);
+            box-shadow: var(--shadow-sm);
+            border-left-color: var(--primary-dark);
+        }
+        
+        .tool-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .tool-desc {
+            font-size: 11px;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+        
+        /* ========== Chat Panel ========== */
+        .chat-panel {
+            background: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid var(--gray-100);
+        }
+        
+        .chat-header {
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--gray-50), white);
+        }
+        
+        .chat-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .chat-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: var(--space-1) var(--space-3);
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: var(--space-6);
+            overflow-y: auto;
+            background: var(--gray-50);
+        }
+        
+        .message {
+            margin-bottom: var(--space-5);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .bubble-user {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: var(--space-4) var(--space-5);
+            border-radius: 18px 18px 4px 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+            box-shadow: var(--shadow-sm);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .message-assistant {
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .bubble-assistant {
+            background: white;
+            border: 1px solid var(--gray-200);
+            padding: var(--space-4);
+            border-radius: 16px 16px 16px 4px;
+            max-width: 85%;
+            word-wrap: break-word;
+            box-shadow: var(--shadow-sm);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        /* Markdown Styling - Enhanced */
+        .bubble-assistant h2 {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius);
+            margin: var(--space-5) 0 var(--space-3) 0;
+            font-size: 16px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .bubble-assistant h3 {
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 700;
+            margin: var(--space-4) 0 var(--space-2) 0;
+            padding-bottom: var(--space-2);
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .bubble-assistant h4 {
+            color: var(--gray-700);
+            font-size: 14px;
+            font-weight: 600;
+            margin: var(--space-3) 0 var(--space-2) 0;
+        }
+        
+        .bubble-assistant table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            font-size: 13px;
+        }
+        
+        .bubble-assistant th {
+            background: linear-gradient(to right, var(--gray-100), var(--gray-50));
+            padding: var(--space-3) var(--space-4);
+            text-align: left;
+            border-bottom: 2px solid var(--gray-200);
+            font-weight: 700;
+            color: var(--gray-700);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .bubble-assistant td {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 13px;
+        }
+        
+        .bubble-assistant tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .bubble-assistant tr:nth-child(even) {
+            background: var(--gray-50);
+        }
+        
+        .bubble-assistant tr:hover {
+            background: rgba(79, 70, 229, 0.03);
+        }
+        
+        .bubble-assistant pre {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            padding: var(--space-4);
+            border-radius: var(--radius);
+            overflow-x: auto;
+            margin: var(--space-3) 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            border: 1px solid #334155;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .bubble-assistant pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border: none;
+            font-size: inherit;
+        }
+        
+        .bubble-assistant code {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .bubble-assistant blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: var(--space-4);
+            margin: var(--space-4) 0;
+            color: var(--gray-600);
+            background: linear-gradient(to right, rgba(79, 70, 229, 0.05), transparent);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-sm);
+            font-style: italic;
+        }
+        
+        .bubble-assistant ul,
+        .bubble-assistant ol {
+            margin: var(--space-3) 0;
+            padding-left: var(--space-5);
+            list-style: none;
+        }
+        
+        .bubble-assistant li {
+            margin: var(--space-2) 0;
+            line-height: 1.8;
+            position: relative;
+            padding-left: var(--space-4);
+        }
+        
+        .bubble-assistant li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .bubble-assistant li li::before {
+            content: '◦';
+        }
+        
+        .bubble-assistant strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .bubble-assistant hr {
+            border: none;
+            border-top: 2px solid var(--gray-200);
+            margin: var(--space-4) 0;
+        }
+        
+        .bubble-assistant p {
+            margin: var(--space-3) 0;
+            line-height: 1.7;
+        }
+        
+        .bubble-assistant > p:first-child {
+            margin-top: 0;
+        }
+        
+        .bubble-assistant > p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* ========== Input Area ========== */
+        .chat-input-area {
+            padding: var(--space-4) var(--space-5);
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            gap: var(--space-3);
+            background: white;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--gray-200);
+            border-radius: 20px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+        
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            padding: var(--space-3) var(--space-5);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .send-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .send-btn:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        /* ========== Scrollbar ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+        
+        /* ========== Loading Animation ========== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(79, 70, 229, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ========== Responsive ========== */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                max-height: 300px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-wrap: wrap;
+            }
+            .tab-btn {
+                flex: 1 1 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="brand">
+                    <div class="brand-logo">🤖</div>
+                    <div class="brand-text">
+                        <h1>Siriusec MCP</h1>
+                        <p>智能运维诊断平台</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tabs (只显示有功能的) -->
+        <!-- 
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('chat')">💬 智能诊断</button>
+            <button class="tab-btn" onclick="switchTab('scheduler')">⏰ 定时任务</button>
+            <button class="tab-btn" onclick="switchTab('plugins')">🔌 自定义插件</button>
+            <button class="tab-btn" onclick="switchTab('skills')">🛒 Skill 市场</button>
+        </div>
+        -->
+
+        <!-- Chat Tab -->
+        <div id="chat-tab" class="tab-content active">
+            <div class="main-grid">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">🛠️ 诊断工具</h3>
+                        <span class="sidebar-count" id="toolCountBadge">0</span>
+                    </div>
+                    
+                    <div class="tool-list" id="toolList">
+                        <div style="text-align: center; color: var(--gray-400); padding: 40px 20px;">
+                            <div class="loading"></div>
+                            <p style="margin-top: 12px; font-size: 13px; color: var(--gray-500);">加载工具列表中...</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Chat Panel -->
+                <main class="chat-panel">
+                    <div class="chat-header">
+                        <h3 class="chat-title">💬 智能诊断对话</h3>
+                        <span class="chat-badge">AI Powered by kimi-k2.5</span>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message message-assistant">
+                            <div class="bubble-assistant">
+                                👋 你好！我是你的 AI 诊断助手。<br><br>
+                                <strong>✨ 核心能力：</strong><br>
+                                • 🧠 智能记忆 - 记住我们的对话内容<br>
+                                • 🔁 上下文理解 - 支持多轮连贯对话<br>
+                                • 🛠️ 工具调用 - 自动使用专业诊断工具<br>
+                                • 📊 数据分析 - 实时系统指标采集<br><br>
+                                <strong style="color: var(--secondary);">🎯 试试问我：</strong><br>
+                                • "帮我看看系统 CPU 状态"<br>
+                                • "内存使用情况如何？"<br>
+                                • "刚才说的问题怎么解决？"
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <input 
+                            type="text" 
+                            class="chat-input" 
+                            id="chatInput" 
+                            placeholder="描述您的问题，我会智能分析..."
+                            onkeypress="handleKeyPress(event)"
+                        >
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                            <span>发送</span>
+                            <span>🚀</span>
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Session History Drawer (侧边抽屉) -->
+        <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+        <div class="session-drawer" id="sessionDrawer">
+            <div class="drawer-header">
+                <h3 class="drawer-title">
+                    📜 最近对话
+                    <span class="history-count" id="drawerCountBadge">0</span>
+                </h3>
+                <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+            </div>
+            <div class="drawer-content">
+                <div class="session-list" id="drawerSessionList">
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>暂无对话记录</p>
+                    </div>
+                </div>
+            </div>
+            <div class="drawer-footer">
+                <button onclick="clearHistory()" class="clear-btn">
+                    🗑️ 清空所有历史
+                </button>
+                <button onclick="debugHistory()" style="margin-top: 10px; width: 100%; background: var(--gray-200); border: none; padding: 8px; border-radius: var(--radius-sm); font-size: 11px; color: var(--gray-600); cursor: pointer;">
+                    🔍 调试：检查 localStorage
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button (悬浮按钮) -->
+        <button class="history-toggle" onclick="toggleDrawer()">
+            <span>📜 历史记录</span>
+            <span class="history-count" id="toggleCountBadge">0</span>
+        </button>
+
+        <!-- 
+        ===== 未启用的标签页 (暂时隐藏) =====
+        <div id="scheduler-tab" class="tab-content">
+            <div style="background: white; border-radius: var(--radius-lg); padding: 60px 40px; text-align: center; border: 1px solid var(--gray-100);">
+                <div style="font-size: 48px; margin-bottom: var(--space-4);">⏰</div>
+                <h2 style="font-size: 22px; color: var(--gray-700); margin-bottom: var(--space-3); font-weight: 700;">定时任务管理</h2>
+                <p style="color: var(--gray-500); font-size: 14px;">功能开发中... 即将上线</p>
+            </div>
+        </div>
+        
+        <div id="plugins-tab" class="tab-content">
+            <div style="background: white; border-radius: var(--radius-lg); padding: 60px 40px; text-align: center; border: 1px solid var(--gray-100);">
+                <div style="font-size: 48px; margin-bottom: var(--space-4);">🔌</div>
+                <h2 style="font-size: 22px; color: var(--gray-700); margin-bottom: var(--space-3); font-weight: 700;">自定义插件</h2>
+                <p style="color: var(--gray-500); font-size: 14px;">功能开发中... 即将上线</p>
+            </div>
+        </div>
+        
+        <div id="skills-tab" class="tab-content">
+            <div style="background: white; border-radius: var(--radius-lg); padding: 60px 40px; text-align: center; border: 1px solid var(--gray-100);">
+                <div style="font-size: 48px; margin-bottom: var(--space-4);">🛒</div>
+                <h2 style="font-size: 22px; color: var(--gray-700); margin-bottom: var(--space-3); font-weight: 700;">Skill 市场</h2>
+                <p style="color: var(--gray-500); font-size: 14px;">功能开发中... 即将上线</p>
+            </div>
+        </div>
+        -->
+    </div>
+
+    <script>
+        const MCP_SERVER_URL = '/api/mcp/unified';
+        let sessionId = null;
+        let tools = [];
+        // 从 localStorage 恢复对话历史
+        let conversationHistory = JSON.parse(localStorage.getItem('conversationHistory') || '[]');
+        let sessionHistory = JSON.parse(localStorage.getItem('sessionHistory') || '[]');
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function init() {
+            console.log('🚀 Init started');
+            console.log('📜 sessionHistory:', sessionHistory.length, 'items');
+            console.log('💬 conversationHistory:', conversationHistory.length, 'items');
+            
+            await initSession();
+            await loadTools();
+            
+            // 恢复对话记录到页面
+            restoreConversationToUI();
+            
+            renderSessionHistory();
+            console.log('✅ Init completed');
+        }
+        
+        // 将保存的对话记录恢复到页面
+        function restoreConversationToUI() {
+            const container = document.getElementById('chatMessages');
+            // 清空默认的欢迎消息
+            container.innerHTML = '';
+            
+            if (conversationHistory.length === 0) {
+                // 显示默认欢迎消息
+                container.innerHTML = `
+                    <div class="message message-assistant">
+                        <div class="bubble-assistant">
+                            👋 你好！我是你的 AI 诊断助手。<br><br>
+                            <strong>✨ 核心能力：</strong><br>
+                            • 🧠 智能记忆 - 记住我们的对话内容<br>
+                            • 🔁 上下文理解 - 支持多轮连贯对话<br>
+                            • 🛠️ 工具调用 - 自动使用专业诊断工具<br>
+                            • 📊 数据分析 - 实时系统指标采集<br><br>
+                            <strong style="color: var(--secondary);">🎯 试试问我：</strong><br>
+                            • "帮我看看系统 CPU 状态"<br>
+                            • "内存使用情况如何？"<br>
+                            • "刚才说的问题怎么解决？"
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 恢复历史对话
+            conversationHistory.forEach(msg => {
+                if (msg.role === 'user') {
+                    const div = document.createElement('div');
+                    div.className = 'message message-user';
+                    div.innerHTML = `<div class="bubble-user">${escapeHtml(msg.content)}</div>`;
+                    container.appendChild(div);
+                } else if (msg.role === 'assistant') {
+                    const div = document.createElement('div');
+                    div.className = 'message message-assistant';
+                    div.innerHTML = `<div class="bubble-assistant">${parseMarkdown(msg.content)}</div>`;
+                    container.appendChild(div);
+                }
+            });
+            
+            // 滚动到底部
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function initSession() {
+            try {
+                console.log('🔵 Starting initSession...');
+                
+                const initRequest = {
+                    jsonrpc: '2.0',
+                    id: Date.now(),
+                    method: 'initialize',
+                    params: {
+                        protocolVersion: '2024-11-05',
+                        capabilities: {},
+                        clientInfo: { name: 'SiriusecMCP-Pro', version: '5.0.0' }
+                    }
+                };
+
+                console.log('📤 Sending request to:', MCP_SERVER_URL);
+                const response = await fetch(MCP_SERVER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(initRequest)
+                });
+
+                console.log('📥 Response status:', response.status);
+                console.log('📋 Response headers:', [...response.headers.entries()]);
+                
+                const data = await response.json();
+                console.log('📦 Response data:', JSON.stringify(data, null, 2));
+                
+                if (data.result) {
+                    console.log('✅ data.result exists');
+                    console.log('   _sessionId:', data.result._sessionId);
+                    
+                    // 优先从响应体中的 _sessionId 字段获取（如果 CORS 不允许读取 header）
+                    sessionId = data.result._sessionId || response.headers.get('Mcp-Session-Id');
+                    console.log('🎯 Final sessionId:', sessionId);
+                } else {
+                    console.error('❌ data.result is missing!');
+                }
+            } catch (error) {
+                console.error('❌ Init failed:', error);
+            }
+        }
+
+        async function loadTools() {
+            try {
+                const request = { jsonrpc: '2.0', id: Date.now(), method: 'tools/list' };
+                const headers = { 'Content-Type': 'application/json' };
+                if (sessionId) headers['Mcp-Session-Id'] = sessionId;
+
+                const response = await fetch(MCP_SERVER_URL, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(request)
+                });
+
+                const data = await response.json();
+                console.log('📦 Tools response:', data);
+                
+                if (data.result && data.result.tools) {
+                    tools = data.result.tools;
+                    
+                    const container = document.getElementById('toolList');
+                    container.innerHTML = '';
+                    
+                    // 更新计数徽章（如果存在）
+                    const badge = document.getElementById('toolCountBadge');
+                    if (badge) badge.textContent = tools.length;
+                    
+                    const categories = {};
+                    tools.forEach(tool => {
+                        const cat = getToolCategory(tool.name);
+                        if (!categories[cat]) categories[cat] = [];
+                        categories[cat].push(tool);
+                    });
+                    
+                    // 按顺序显示分类
+                    const categoryOrder = ['diag', 'analysis', 'list', 'check', 'init', 'io', 'mem', 'disk', 'net', 'sched', 'other'];
+                    
+                    categoryOrder.forEach(cat => {
+                        if (categories[cat] && categories[cat].length > 0) {
+                            const catTitle = document.createElement('div');
+                            catTitle.style.cssText = 'font-weight: 600; color: var(--gray-700); margin: 16px 0 10px 0; font-size: 12px; display: flex; align-items: center; gap: 6px;';
+                            catTitle.innerHTML = `<span style="display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%;"></span>${cat.toUpperCase()} (${categories[cat].length})`;
+                            container.appendChild(catTitle);
+                            
+                            categories[cat].forEach(tool => {
+                                container.appendChild(createToolElement(tool));
+                            });
+                        }
+                    });
+                    
+                    // 显示未分类的工具（如果有）
+                    Object.keys(categories).forEach(cat => {
+                        if (!categoryOrder.includes(cat) && categories[cat].length > 0) {
+                            const catTitle = document.createElement('div');
+                            catTitle.style.cssText = 'font-weight: 600; color: var(--gray-700); margin: 16px 0 10px 0; font-size: 12px; display: flex; align-items: center; gap: 6px;';
+                            catTitle.innerHTML = `<span style="display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%;"></span>${cat.toUpperCase()} (${categories[cat].length})`;
+                            container.appendChild(catTitle);
+                            
+                            categories[cat].forEach(tool => {
+                                container.appendChild(createToolElement(tool));
+                            });
+                        }
+                    });
+                    
+                    console.log(`✅ Loaded ${tools.length} tools`);
+                } else {
+                    console.warn('⚠️ No tools found in response:', data);
+                    document.getElementById('toolList').innerHTML = `
+                        <div style="text-align: center; color: var(--gray-400); padding: 40px 20px;">
+                            📭 暂无可用工具<br>
+                            <small style="color: var(--gray-500); margin-top: 8px; display: block;">请检查 MCP Server 是否正常启动</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ Load tools failed:', error);
+                document.getElementById('toolList').innerHTML = `
+                    <div style="text-align: center; color: var(--danger); padding: 40px 20px;">
+                        ❌ 加载失败<br>
+                        <small style="color: var(--gray-500);">${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        function createToolElement(tool) {
+            const div = document.createElement('div');
+            div.className = 'tool-item';
+            div.onclick = () => useTool(tool);
+            
+            div.innerHTML = `
+                <div class="tool-name">${tool.name}</div>
+                <div class="tool-desc">${tool.description || '暂无描述'}</div>
+            `;
+            return div;
+        }
+
+        function useTool(tool) {
+            const input = document.getElementById('chatInput');
+            input.value = `使用 ${tool.name} 工具：${tool.description}`;
+            input.focus();
+        }
+
+        // 根据工具名称智能分类
+        function getToolCategory(toolName) {
+            const name = toolName.toLowerCase();
+            
+            // 智能诊断
+            if (name === 'smart_diagnose') return 'diag';
+            
+            // 分析类工具
+            if (name.includes('analysis') || name.includes('analyze')) return 'analysis';
+            
+            // 列表查询类
+            if (name.startsWith('list_')) return 'list';
+            
+            // 检查类
+            if (name.startsWith('check_') || name.endsWith('check')) return 'check';
+            
+            // 初始化类
+            if (name.startsWith('initial_') || name.includes('initialed')) return 'init';
+            
+            // IO 相关
+            if (name.startsWith('io')) return 'io';
+            
+            // 内存相关
+            if (name.startsWith('mem') || name.startsWith('java') || name.startsWith('oom')) return 'mem';
+            
+            // 磁盘相关
+            if (name.startsWith('disk') || name.includes('vmcore')) return 'disk';
+            
+            // 网络相关
+            if (name.startsWith('net') || name.startsWith('packet')) return 'net';
+            
+            // 调度相关
+            if (name.startsWith('delay') || name.startsWith('load') || name.startsWith('sched')) return 'sched';
+            
+            // 其他
+            return 'other';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading"></span>';
+            
+            addUserMessage(message);
+            input.value = '';
+            saveToHistory(message);
+            
+            try {
+                const request = {
+                    jsonrpc: '2.0',
+                    id: Date.now(),
+                    method: 'tools/call',
+                    params: {
+                        name: 'smart_diagnose',
+                        arguments: {
+                            symptom: message,
+                            context: buildContext(),
+                            conversation_history: conversationHistory.slice(-5)
+                        }
+                    }
+                };
+                
+                const headers = { 'Content-Type': 'application/json' };
+                if (sessionId) headers['Mcp-Session-Id'] = sessionId;
+                
+                const response = await fetch(MCP_SERVER_URL, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(request)
+                });
+                
+                const data = await response.json();
+                if (data.result && data.result.content) {
+                    const result = data.result.content[0]?.text || '诊断完成';
+                    addAssistantMessage(result);
+                    conversationHistory.push({ role: 'assistant', content: result });
+                    // 保存完整对话到 localStorage
+                    localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+                    updateMemoryCount();
+                }
+            } catch (error) {
+                addSystemMessage(`❌ 请求失败：${error.message}`);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<span>发送</span><span>🚀</span>';
+            }
+        }
+
+        function buildContext() {
+            return `Session: ${sessionId || 'N/A'}, History: ${conversationHistory.length}`;
+        }
+
+        function saveToHistory(msg) {
+            conversationHistory.push({ role: 'user', content: msg });
+            // 保存完整对话到 localStorage
+            localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+            
+            sessionHistory.unshift({ question: msg, time: new Date().toLocaleString() });
+            sessionHistory = sessionHistory.slice(0, 20);
+            localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
+            console.log('💾 Saved to history:', msg, 'Total:', sessionHistory.length);
+            renderSessionHistory();
+        }
+
+        // Toggle Drawer
+        function toggleDrawer() {
+            const drawer = document.getElementById('sessionDrawer');
+            const overlay = document.getElementById('overlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+        
+        function renderSessionHistory() {
+            const container = document.getElementById('drawerSessionList');
+            const badges = [
+                document.getElementById('drawerCountBadge'),
+                document.getElementById('toggleCountBadge')
+            ];
+            
+            // 更新所有计数徽章
+            badges.forEach(badge => {
+                if (badge) badge.textContent = sessionHistory.length;
+            });
+            
+            if (sessionHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>暂无对话记录</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            sessionHistory.slice(0, 20).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'session-item';
+                
+                const timeAgo = getTimeAgo(new Date(item.time));
+                
+                div.innerHTML = `
+                    <span class="session-question">${item.question}</span>
+                    <span class="session-time">${timeAgo}</span>
+                `;
+                
+                div.onclick = () => {
+                    document.getElementById('chatInput').value = item.question;
+                    document.getElementById('chatInput').focus();
+                    toggleDrawer(); // 关闭抽屉
+                };
+                
+                container.appendChild(div);
+            });
+        }
+        
+        // 获取相对时间
+        function getTimeAgo(date) {
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            if (seconds < 60) return '刚刚';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}分钟前`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}小时前`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}天前`;
+            
+            return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        }
+
+        function clearHistory() {
+            if (confirm('确定清空所有对话历史？')) {
+                sessionHistory = [];
+                conversationHistory = [];
+                localStorage.removeItem('sessionHistory');
+                localStorage.removeItem('conversationHistory');
+                renderSessionHistory();
+                updateMemoryCount();
+                // 刷新页面恢复欢迎消息
+                location.reload();
+            }
+        }
+
+        function debugHistory() {
+            const stored = localStorage.getItem('sessionHistory');
+            console.log('🔍 localStorage sessionHistory:', stored);
+            console.log('🔍 Current sessionHistory variable:', sessionHistory);
+            alert('localStorage: ' + (stored ? stored.substring(0, 200) + '...' : 'empty') + '\n\nCurrent count: ' + sessionHistory.length);
+        }
+
+        function addUserMessage(text) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message message-user';
+            div.innerHTML = `<div class="bubble-user">${escapeHtml(text)}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addAssistantMessage(text) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message message-assistant';
+            div.innerHTML = `<div class="bubble-assistant">${parseMarkdown(text)}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.style.cssText = 'text-align: center; color: var(--gray-400); font-size: 12px; margin: 10px 0;';
+            div.textContent = text;
+            container.appendChild(div);
+        }
+
+        function parseMarkdown(text) {
+            let html = text;
+            
+            // 1. 先提取并替换代码块（使用占位符）
+            const codeBlocks = [];
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, function(match, lang, code) {
+                codeBlocks.push('<pre><code>' + escapeHtml(code.trim()) + '</code></pre>');
+                return '\n___CODE_BLOCK_' + (codeBlocks.length - 1) + '___\n';
+            });
+            
+            // 2. 提取并替换表格（使用占位符）
+            const tables = [];
+            html = html.replace(/((?:\|[^\n]+\|\n?)+)/g, function(match) {
+                const lines = match.trim().split('\n').filter(l => l.trim().startsWith('|'));
+                if (lines.length < 2) return match;
+                
+                const headers = lines[0].split('|').map(h => h.trim()).filter(h => h);
+                const dataRows = lines.slice(2); // 跳过分隔符行
+                
+                let tableHtml = '<table><thead><tr>';
+                headers.forEach(h => {
+                    tableHtml += '<th>' + escapeHtml(h) + '</th>';
+                });
+                tableHtml += '</tr></thead><tbody>';
+                
+                dataRows.forEach(row => {
+                    const cells = row.split('|').map(c => c.trim()).filter(c => c);
+                    if (cells.length > 0) {
+                        tableHtml += '<tr>';
+                        cells.forEach(cell => {
+                            tableHtml += '<td>' + escapeHtml(cell) + '</td>';
+                        });
+                        tableHtml += '</tr>';
+                    }
+                });
+                tableHtml += '</tbody></table>';
+                
+                tables.push(tableHtml);
+                return '\n___TABLE_' + (tables.length - 1) + '___\n';
+            });
+            
+            // 3. 转义剩余文本
+            html = escapeHtml(html);
+            
+            // 4. 处理标题
+            html = html.replace(/^## (.*)$/gim, '<h2>$1</h2>');
+            html = html.replace(/^### (.*)$/gim, '<h3>$1</h3>');
+            html = html.replace(/^#### (.*)$/gim, '<h4>$1</h4>');
+            
+            // 5. 处理列表
+            html = html.replace(/^\*\s+(.*)$/gim, '<li>$1</li>');
+            html = html.replace(/^-\s+(.*)$/gim, '<li>$1</li>');
+            html = html.replace(/^\d+\.\s+(.*)$/gim, '<li>$1</li>');
+            html = html.replace(/(<li>.*?<\/li>\n?)+/g, function(match) {
+                return '<ul>' + match.replace(/\n$/, '') + '</ul>';
+            });
+            
+            // 6. 处理粗体和斜体
+            html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // 7. 处理行内代码
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // 8. 处理水平线
+            html = html.replace(/^---$/gim, '<hr>');
+            
+            // 9. 处理段落
+            const paragraphs = html.split('\n\n');
+            html = paragraphs.map(p => {
+                p = p.trim();
+                if (!p) return '';
+                if (p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('<hr') || p.startsWith('___')) return p;
+                return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+            }).filter(p => p).join('\n');
+            
+            // 10. 恢复表格
+            tables.forEach((table, index) => {
+                html = html.replace('___TABLE_' + index + '___', table);
+            });
+            
+            // 11. 恢复代码块
+            codeBlocks.forEach((block, index) => {
+                html = html.replace('___CODE_BLOCK_' + index + '___', block);
+            });
+            
+            return html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        function updateMemoryCount() {
+            // 记忆计数功能已移除
+            console.log('Conversation history count:', conversationHistory.length);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

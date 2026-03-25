@@ -45,3 +45,48 @@ debug/
 
 # Local development
 .qoder/
+
+# Config files with sensitive data
+config.toml
+.env.*
+
+# Test scripts (keep only essential ones)
+test-*.sh
+quick-test.sh
+demo-cli-test.sh
+configure-openclaw.sh
+start.sh
+start-webui.sh
+
+# Documentation (keep only essential)
+AI_DIAGNOSIS_*.md
+FEATURE_ENHANCEMENT_PLAN.md
+IMPLEMENTATION_COMPLETE.md
+LOCAL_DEPLOYMENT_GUIDE.md
+MANUAL_TESTING_GUIDE.md
+MCP_TOOL_INTEGRATION_PLAN.md
+OPTIMIZED_WEBUI_GUIDE.md
+PHASE1_*.md
+PHASE2_*.md
+PROMPT_FORMATTING_GUIDE.md
+ROADMAP_2024.md
+TEST_RESULTS.md
+UPGRADE_SUMMARY.md
+WEBUI_GUIDE.md
+WEB_VS_CLI_COMPARISON.md
+
+# Logs
+logs/
+
+# Web UI backup files
+web-ui/debug-index.html
+web-ui/final-test.html
+web-ui/index-backup-final.html
+web-ui/index-classic-backup.html
+web-ui/index-full.html
+web-ui/index-optimized-backup.html
+web-ui/index-optimized.html
+web-ui/index-pro-backup.html
+web-ui/index-pro.html
+web-ui/index-ultimate.html
+web-ui/test-session.html

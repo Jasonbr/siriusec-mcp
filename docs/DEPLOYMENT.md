@@ -263,6 +263,71 @@ kubectl apply -f k8s/hpa.yaml
 kubectl apply -f k8s/ingress.yaml
 ```
 
+## Web UI 部署
+
+### 本地测试
+
+```bash
+# 进入 Web UI 目录
+cd web-ui
+
+# 启动本地 HTTP 服务器
+python3 -m http.server 8080
+
+# 或使用 Node.js
+npx serve .
+```
+
+访问地址: `http://localhost:8080`
+
+### 生产部署
+
+Web UI 是静态文件，可以部署到任何静态文件服务器：
+
+#### Nginx 配置示例
+
+```nginx
+server {
+    listen 80;
+    server_name siriusec-mcp.example.com;
+    root /var/www/siriusec-mcp/web-ui;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # 反向代理 MCP API
+    location /api/mcp/ {
+        proxy_pass http://localhost:7140/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+#### 使用 Docker 部署 Web UI
+
+```dockerfile
+FROM nginx:alpine
+COPY web-ui /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+```
+
+### Web UI 配置
+
+编辑 `web-ui/index.html` 中的 MCP 服务器地址：
+
+```javascript
+// 开发环境（本地 MCP Server）
+const MCP_SERVER_URL = 'http://localhost:7140/mcp/unified';
+
+// 生产环境（通过 Nginx 反向代理）
+const MCP_SERVER_URL = '/api/mcp/unified';
+```
+
 ## 配置说明
 
 ### 环境变量
